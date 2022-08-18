@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+    <canvas id="canvas" style=""></canvas>
+    <div class="navbar">
+        <a class="norm" href="/">Linktree</a>
+        {{#if auth}}
+            <a class="abnorm" href="/users/{{auth}}">Profile</a>
+            <a class="abnorm" href="/logout">Logout</a>
+        {{else}}
+            <a class="abnorm" href="/login">Login</a>
+        {{/if}}
+    </div>
+    
+    {{{ body }}}
+</body>
+</html>

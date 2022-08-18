@@ -1,0 +1,23 @@
+<p> 
+    <ul>
+        {{# each errors }}
+        <li>{{ this.msg }}</li>
+        {{/each}}
+    </ul>
+</p>
+<p> 
+    <ul>
+        {{#each errors2 }}
+        <li>{{ this.msg }}</li>
+        {{/each}}
+    </ul>
+</p>
+<form action="/login/register" method="post">
+    <input type="text" id="username" name="username" placeholder="Username">
+    <input type="text" id="name" name="name" placeholder="Name">
+    <input type="password" id="password" name="password" placeholder="Password">
+    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password">
+    <input type="text" id="descrip" name="descrip" placeholder="Description">
+    <input type="text" id="sorc" name="sorc" placeholder="Profile Pic Link">
+    <button type="submit" value="Upload">Submit</button>
+</form>

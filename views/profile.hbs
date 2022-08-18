@@ -1,0 +1,35 @@
+<h1>{{details.name}}</h1>
+<h2>{{details.descrip}}</h2>
+<h2>{{details.sorc}}</h2>
+<h3>
+    <a href="/link/{{auth}}/new">
+        <li>New Link</li>
+    </a>
+</h3>
+<ul>
+    
+{{#if details.user}}
+    {{#each link }}
+        <div>
+            <a href="https://{{this.sorc}}">
+                <li>{{ this.Heading }}</li>
+            </a>
+            <a href="/link/{{this.writer}}/edit/{{this.id}}">
+                <li>Edit</li>
+            </a>
+            <a href="/link/{{this.writer}}/delete/{{this.id}}">
+                <li>Delete</li>
+            </a>
+        </div>
+    {{/each}}
+{{else}}
+    {{#each link }}
+        <div>
+            <a href="https://{{this.sorc}}">
+                <li>{{ this.Heading }}</li>
+            </a>
+        </div>
+    {{/each}}
+{{/if}}
+        
+</ul>

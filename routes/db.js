@@ -25,11 +25,11 @@ function create_check_database() {
 
 function create_check_tables() {
   let t1 =
-    "CREATE TABLE IF NOT EXISTS users(uid varchar(255), name varchar(255), descrip LONGBLOB, img LONGBLOB, pwd varchar(255), PRIMARY KEY (uid))ENGINE=INNODB;";
+    "CREATE TABLE IF NOT EXISTS users(uid varchar(255), name  varchar(255), descrip LONGBLOB, img LONGBLOB, pwd varchar(255),text char(7), bgc char(7), bc char(7), PRIMARY KEY (name))ENGINE=INNODB;";
   con.query(t1, function (err, result) {
     if (err) throw err;
     let t2 =
-      "CREATE TABLE IF NOT EXISTS links(writer varchar(255) NOT NULL, Heading LONGBLOB, sorc LONGBLOB, id int AUTO_INCREMENT NOT NULL PRIMARY KEY, FOREIGN KEY (writer) REFERENCES users(uid) ON DELETE CASCADE)ENGINE=INNODB;";
+      "CREATE TABLE IF NOT EXISTS links(writer varchar(255) NOT NULL, Heading LONGBLOB, sorc LONGBLOB, id int AUTO_INCREMENT NOT NULL PRIMARY KEY, FOREIGN KEY (writer) REFERENCES users(name) ON DELETE CASCADE)ENGINE=INNODB;";
     con.query(t2, function (err, result) {
       if (err) throw err;
     });
@@ -56,8 +56,9 @@ function check_username(uid, pwd) {
 
 function get_details(uid) {
   return new Promise((resolve, reject) => {
-    con.query("SELECT * FROM USERS WHERE uid = ?", uid, function (err, result) {
+    con.query("SELECT * FROM USERS WHERE name = ?", uid, function (err, result) {
       if (err) {
+        console.log(err)
         reject(false);
       } else {
         resolve(result);
@@ -85,10 +86,11 @@ function get_link(uid) {
 function adduser(a) {
   return new Promise((resolve, reject) => {
     con.query(
-      "INSERT INTO USERS VALUES (?,?,?,?,?)",
-      [a.username, a.name, a.descrip, a.sorc, a.password],
+      "INSERT INTO USERS (uid,name,descrip,img,pwd) VALUES (?,?,?,?,?)",
+      [a.username, a.name.toUpperCase(), a.descrip, a.sorc, a.password],
       function (err, result) {
         if (err) {
+          console.log(err)
           reject(false);
         } else {
           resolve(true);
@@ -160,7 +162,22 @@ function delete_link(a) {
   });
 }
 
-
+function addconfig(a) {
+  return new Promise((resolve, reject) => {
+    con.query(
+      "UPDATE users set text = ?,bgc = ?, bc = ? where name = ?",
+      [a.body.textco, a.body.bgco,a.body.bgco, a.params.id],
+      function (err, result) {
+        if (err) {
+          console.log(err)
+          reject(false);
+        } else {
+          resolve(true);
+        }
+      }
+    );
+  });
+}
 
 module.exports = {
   startup,
@@ -172,4 +189,5 @@ module.exports = {
   add_link,
   edit_link,
   delete_link,
+  addconfig,
 };

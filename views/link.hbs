@@ -1,12 +1,12 @@
 <h2>Link</a></h2>
 {{#if link}}
-    <form action="/link/{{auth}}/submit/{{link.id}}" method="post">
+    <form id="abc" action="/link/{{auth}}/submit/{{link.id}}" method="post">
 {{else}}
-    <form action="/link/{{auth}}/submit" method="post">
+    <form id="abc" action="/link/{{auth}}/submit" method="post">
 {{/if}}
-        <label>Heading</label>
-            <input type = "text" id="heading" name="heading" value={{link.Heading}}>
-        <label>Link</label>
-            <input type = "text" id="sorc" name="sorc" value={{link.sorc}}>
-        <button type="submit">Submit</button>
+        <div><label>Heading</label></div>
+            <div><input type = "text" id="heading" name="heading" value={{link.Heading}}></div>
+        <div><label>Link</label></div>
+            <div><input type = "text" id="sorc" name="sorc" value={{link.sorc}}></div>
+        <div><button type="submit">Submit</button></div>
     </form>

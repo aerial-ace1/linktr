@@ -1,32 +1,75 @@
 body {
-  padding-top: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding-top: 30vh;
+  font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
   text-align: center;
+  background-image: url("../img/1.png");
+  color: #f2f2f2;
 }
 
+h1 ,h3{
+
+  
+  font-family: "Cabin","Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-weight: 700;
+  margin: 0 0 35px;
+  letter-spacing: 1px;
+  text-transform: uppercase;  
+}
+
+form {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
 a {
-  color: #00B7FF;
+  text-decoration: none;
 }
 
-canvas{
-  position:fixed; 
-  top:0;
-  left:0;
-  z-index:-1
+input{
+  margin: 20px;
+  padding: 10px;
+  min-width: 50vw;
+  max-width: 90vw;
+}
+
+#link {
+  display: flex;
+  flex-flow: column wrap;
+}
+button{
+  margin: 10px;
+  padding: 5px;
+  min-width: 30vw;
+  max-width: 60vw;
+}
+
+#site, #new{
+  width: 70vw;
+}
+
+#edi{
+  margin: 10px;
+  padding: 5px;
+  min-width: 10vw;
 }
 
 .navbar {
+  padding: 0;
+  margin: 0;
+  font-size: 30px;
   overflow: hidden;
-  background-color: #333;
+  background-color: #000000;
   position: fixed; 
-  top: 0; 
-  left: 0;
+  top: 0%;
+  right: 1px; 
   width: 100%; 
-  min-height: 50px;
+  min-height: 4vw;
 }
 
 .norm {
-  max-width: 80px;
+  max-width: 100px;
   margin: 2px;
   padding: 5px;
   float: left;
@@ -47,7 +90,14 @@ canvas{
   text-decoration: none;
 }
 
+@media(max-width : 400px){
+  #logout{
+    display: none;
+  }
+}
+
 .navbar a:hover {
+  font : 600px;
   background: #ddd;
   color: black;
 }

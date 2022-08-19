@@ -3,6 +3,8 @@ const session = require("express-session");
 var checks = require("./db");
 var router = express.Router();
 
+var configError = "There seems to be an issue. Please Try again."
+
 /* GET users listing. */
 router.get("/:user/new", function (req, res, next) {
     if (req.session.auth){
@@ -56,6 +58,49 @@ router.get("/:user/delete/:id",function (req, res, next) {
     }
 });
 
+router.get("/:id/tree", function (req, res, next) {
+    if (req.session.auth){
+      if (req.session.auth === req.params.id) {
+        res.render("colour", {title: "Colour", auth: req.session.auth, errors : req.session.configerrors} )
+        req.session.configerrors = null;
+      }
+      else{
+        req.session.regerrorsextra = { msg: "Please login" };
+        res.redirect("../../../login");
+    }
+  }
+  else{
+      req.session.regerrorsextra = { msg: "Please login" };
+      res.redirect("../../../login");
+  }
+});
+
+router.post("/:id/tree", function (req, res, next) {
+  if (req.session.auth){
+      if (req.session.auth === req.params.id) config_callback(req,res);
+      else{
+        req.session.regerrorsextra = { msg: "Please login" };
+        res.redirect("../../../login");
+    }
+  }
+  else{
+      req.session.regerrorsextra = { msg: "Please login" };
+      res.redirect("../../../login");
+  }
+});
+
+
+async function config_callback(req,res){
+    try {
+      await checks.addconfig(req)
+    } catch (error) {
+        console.log(error)
+        console.log("abc")
+    }
+    console.log("ab")
+    req.session.configerrors =  configError; 
+    res.redirect(`/users/${req.session.auth}`)
+  }
 
 async function edit_callback(id,req,res){
     let ided_l = await checks.id_link(id);
@@ -72,6 +117,7 @@ async function edit_callback(id,req,res){
         }
     }
 }
+
 
 
 async function submit_callback(req,res){
@@ -97,7 +143,7 @@ async function delete_callback(req,res){
     else{
         if (req.session.auth === ided_l[0].writer){
             let delete_l = checks.delete_link(req);
-            res.redirect(`../../users/${req.session.auth}`)
+            res.redirect(`../../../users/${req.session.auth}`)
         }
         else{
             console.log("abc")

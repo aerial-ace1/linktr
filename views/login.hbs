@@ -10,11 +10,18 @@
         </section>
     {{/if}}</p>
 <form action="/login" method="post">
-    <input type="text" id="username" name="username" placeholder="Username">
-    <input type="password" id="password" name="password" placeholder="Password">
+    <div>
+        <input type="text" id="username" name="username" placeholder="Username">
+        <input type="password" id="password" name="password" placeholder="Password">
+    </div>
+    <div>
+        <button type="submit">Login</button>
+    </div>
     <br>
-    <br>
-    <button type="submit">Login</button>
+    
 </form>
-<br>
-<a href="/login/register">Register</a>
+
+<div>
+    <a href="/login/register"><button>Register</button></a>
+</div>
+

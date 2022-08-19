@@ -1,33 +1,54 @@
 <h1>{{details.name}}</h1>
-<h2>{{details.descrip}}</h2>
+<h3>{{details.descrip}}</h3>
 <h2>{{details.sorc}}</h2>
-<h3>
-    <a href="/link/{{auth}}/new">
-        <li>New Link</li>
-    </a>
-</h3>
 <ul>
+
+<button style="background-color: {{details.bc}};">
+    <a style="color: {{details.text}};" href="/link/{{auth}}/tree">
+        Colour Scheme
+    </a>
+</button>
     
 {{#if details.user}}
     {{#each link }}
-        <div>
-            <a href="https://{{this.sorc}}">
-                <li>{{ this.Heading }}</li>
-            </a>
-            <a href="/link/{{this.writer}}/edit/{{this.id}}">
-                <li>Edit</li>
-            </a>
-            <a href="/link/{{this.writer}}/delete/{{this.id}}">
-                <li>Delete</li>
-            </a>
+        <div id="link">
+            <div>
+                <button style="background-color: {{details.bc}};" id="site">    
+                    <a style="color: {{details.text}};" href="https://{{this.sorc}}">
+                        {{ this.Heading }}
+                    </a>
+                </button>
+            </div>
+            <div>
+                <button style="background-color: {{details.bc}};" id="edi">
+                    <a style="color: {{details.text}};" href="/link/{{this.writer}}/edit/{{this.id}}">
+                    Edit
+                    </a>
+                </button>
+                <button style="background-color: {{details.bc}};" id="edi">
+                    <a style="color: {{details.text}};" href="/link/{{this.writer}}/delete/{{this.id}}">
+                    Delete
+                    </a>
+                </button>
+            </div>
         </div>
     {{/each}}
+    <button style="background-color: {{details.bc}};">
+    <a style="color: {{details.text}};" href="/link/{{auth}}/new">
+        New Link
+    </a>
+    </button>
+    
 {{else}}
     {{#each link }}
         <div>
-            <a href="https://{{this.sorc}}">
-                <li>{{ this.Heading }}</li>
-            </a>
+            <li>
+                <button style="background-color: {{details.bc}};"  id="new">    
+                    <a style="color: {{details.text}};" href="https://{{this.sorc}}">
+                        <h3>{{ this.Heading }}</h3>
+                    </a>
+                </button>
+            </li>
         </div>
     {{/each}}
 {{/if}}

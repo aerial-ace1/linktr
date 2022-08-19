@@ -3,7 +3,7 @@ var router = express.Router();
 var checks = require("./db");
 
 var creError = [{ msg: "Invalid Credentials" }];
-var userError = [{ msg: "Pick Another Username" }]
+var userError = [{ msg: "Pick Another Name" }]
 
 router.get("/", function (req, res, next) {
   res.render("index", { title: "Linktree", auth: req.session.auth });
@@ -93,13 +93,14 @@ async function callback(req, res) {
     req.session.errors = creError;
     res.redirect("/login");
   } else {
-    req.session.auth = profile[0].uid;
-    res.redirect(`/users/${profile[0].uid}`);
+    req.session.auth = profile[0].name;
+    res.redirect(`/users/${profile[0].name}`);
   }
 }
 
 async function callback2(req, res) {
-  let result = await checks.get_details(req.body.username);
+  let result = await checks.get_details(req.body.name);
+  console.log("a",result);
   if (
     result[0] === undefined &&
     req.session.regerrors === false &&
@@ -108,14 +109,15 @@ async function callback2(req, res) {
     req.session.regerrorsextra = await checks.adduser(req.body);
     if (req.session.regerrorsextra) {
       req.session.success = true;
-      req.session.auth = req.body.username;
-      res.redirect(`/users/${req.body.username}`);
+      req.session.auth = req.body.name;
+      res.redirect(`/users/${req.body.name}`);
     } else {
+      req.session.regerrors =  (userError);
       res.redirect("/login/register");
     }
   } else {
     if (result[0] != undefined) {
-      if (result[0].uid === req.body.username) {
+      if (result[0].name === req.body.name) {
         console.log("a");
         req.session.regerrors =  (userError);
       }

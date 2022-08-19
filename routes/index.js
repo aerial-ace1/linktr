@@ -5,7 +5,8 @@ var checks = require("./db");
 var creError = [{ msg: "Invalid Credentials" }];
 var userError = [{ msg: "Pick Another Name" }]
 
-router.get("/", function (req, res, next) {
+router.get("/", checks.et_link, function (req, res, next) {
+  console.log("c")
   res.render("index", { title: "Linktree", auth: req.session.auth });
 });
 
@@ -31,6 +32,7 @@ router.get("/login", function (req, res, next) {
 });
 
 router.post("/login", function (req, res, next) {
+  console.log(req.session.a)
   req.check("username","Enter a proper Email ID").isEmail().isLength({ max: 255 });
   req.check("password", "Password is invalid").isLength({ min: 8 });
 
@@ -83,10 +85,12 @@ router.post("/login/register", function (req, res, next) {
   callback2(req, res);
 });
 
-async function callback(req, res) {
-  let profile = await checks.check_username(
+async function callback(req, res,next) {
+  let salting = await checks.et_details(req.body.username)[0].salt
+  let profile =  await checks.check_username(
     req.body.username,
-    req.body.password
+    req.body.password,
+    salting
   );
   if (profile[0] == undefined) {
     req.session.success = false;
@@ -118,7 +122,6 @@ async function callback2(req, res) {
   } else {
     if (result[0] != undefined) {
       if (result[0].name === req.body.name) {
-        console.log("a");
         req.session.regerrors =  (userError);
       }
     }

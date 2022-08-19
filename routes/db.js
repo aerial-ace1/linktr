@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 require("dotenv").config();
+var crypto = require('crypto');
 
 var con = mysql.createConnection({
   host: process.env.MY_SQL_HOST,
@@ -25,7 +26,7 @@ function create_check_database() {
 
 function create_check_tables() {
   let t1 =
-    "CREATE TABLE IF NOT EXISTS users(uid varchar(255), name  varchar(255), descrip LONGBLOB, img LONGBLOB, pwd varchar(255),text char(7), bgc char(7), bc char(7), PRIMARY KEY (name))ENGINE=INNODB;";
+    "CREATE TABLE IF NOT EXISTS users(uid varchar(255), name  varchar(255), descrip LONGBLOB, img LONGBLOB, pwd varchar(255),text char(7), bgc char(7), bc char(7), hash LONGBLOB, salt LONGBLOB,  PRIMARY KEY (name))ENGINE=INNODB;";
   con.query(t1, function (err, result) {
     if (err) throw err;
     let t2 =
@@ -37,16 +38,19 @@ function create_check_tables() {
   });
 }
 
-function check_username(uid, pwd) {
+function check_username(uid, pwd,salting) {
   //internally chk passwd
   return new Promise((resolve, reject) => {
+    let has = crypto.pbkdf2Sync(pwd, salting, 
+      1000, 64, `sha512`).toString(`hex`);
     con.query(
-      "SELECT * FROM USERS WHERE uid = ? AND pwd = ?",
-      [uid, pwd],
+      "SELECT * FROM USERS WHERE uid = ? AND hash = ?",
+      [uid, has],
       function (err, result) {
         if (err) {
           reject(false);
         } else {
+          console.log(result)
           resolve(result);
         }
       }
@@ -57,6 +61,19 @@ function check_username(uid, pwd) {
 function get_details(uid) {
   return new Promise((resolve, reject) => {
     con.query("SELECT * FROM USERS WHERE name = ?", uid, function (err, result) {
+      if (err) {
+        console.log(err)
+        reject(false);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
+function et_details(uid) {
+  return new Promise((resolve, reject) => {
+    con.query("SELECT * FROM USERS WHERE uid = ?", uid, function (err, result) {
       if (err) {
         console.log(err)
         reject(false);
@@ -82,12 +99,30 @@ function get_link(uid) {
     );
   });
 }
+function et_link(req,res,next) {
+  console.log("a")
+  
+    con.query(
+      "SELECT * FROM links ORDER BY ID desc",
+      function (err, result) {
+        if (err) {
+          throw err;
+        } else {
+          console.log(result)
+          next();
+        }
+      }
+    );
+}
 
 function adduser(a) {
   return new Promise((resolve, reject) => {
+    let sal = crypto.randomBytes(16).toString('hex');
+    let has = crypto.pbkdf2Sync(a.password, sal, 
+      1000, 64, `sha512`).toString(`hex`);
     con.query(
-      "INSERT INTO USERS (uid,name,descrip,img,pwd) VALUES (?,?,?,?,?)",
-      [a.username, a.name.toUpperCase(), a.descrip, a.sorc, a.password],
+      "INSERT INTO USERS (uid,name,descrip,img,salt,hash) VALUES (?,?,?,?,?,?)",
+      [a.username, a.name.toUpperCase(), a.descrip, a.sorc,sal, has ],
       function (err, result) {
         if (err) {
           console.log(err)
@@ -180,6 +215,8 @@ function addconfig(a) {
 }
 
 module.exports = {
+  et_details,
+  et_link,
   startup,
   check_username,
   get_details,

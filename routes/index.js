@@ -86,11 +86,12 @@ router.post("/login/register", function (req, res, next) {
 });
 
 async function callback(req, res,next) {
-  let salting = await checks.et_details(req.body.username)[0].salt
+  let salting = await checks.et_details(req.body.username)
+  console.log(salting)
   let profile =  await checks.check_username(
     req.body.username,
     req.body.password,
-    salting
+    salting[0].salt
   );
   if (profile[0] == undefined) {
     req.session.success = false;
